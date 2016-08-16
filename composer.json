@@ -1,0 +1,34 @@
+{
+  "name": "jasongrimes/silex-simpleuser",
+  "type": "library",
+  "description": "A simple database-backed user provider for Silex, with associated services and controllers.",
+  "keywords": ["silex", "user", "user provider", "simple user provider"],
+  "homepage": "http://github.com/jasongrimes/silex-simpleuser",
+  "license": "BSD-2-Clause",
+  "authors": [
+    {
+      "name": "Jason Grimes",
+      "email": "jason@grimesit.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.6.0",
+    "silex/silex": "~2.0",
+    "symfony/security": "~2.3",
+    "doctrine/dbal": "~2.4",
+    "symfony/twig-bridge": "~2.3",
+    "jasongrimes/paginator": "~1.0",
+    "swiftmailer/swiftmailer": "~5.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.2",
+    "ext-pdo_sqlite": "*"
+  },
+  "autoload": {
+    "psr-0": {"SimpleUser": "src/"}
+  },
+  "autoload-dev": {
+    "psr-0": {"SimpleUser\\Tests": "tests/"}
+  }
+
+}
