@@ -28,7 +28,7 @@ class UserServiceProviderTest extends \PHPUnit_Framework_TestCase
         $app->register(new Provider\RememberMeServiceProvider());
         $app->register(new Provider\SessionServiceProvider());
         $app->register(new Provider\ServiceControllerServiceProvider());
-        $app->register(new Provider\UrlGeneratorServiceProvider());
+        $app->register(new Provider\RoutingServiceProvider());
         $app->register(new Provider\TwigServiceProvider());
         $app->register(new Provider\SwiftmailerServiceProvider());
 

@@ -9,6 +9,14 @@ use SimpleUser\Migration\MigrateV1ToV2;
 use SimpleUser\UserManager;
 use SimpleUser\User;
 
+/**
+ * Class MigrateV1ToV2Test
+ *
+ * Test the migration from V1 to V2
+ *
+ * @package SimpleUser\Tests\Migration
+ *
+ */
 class MigrateV1ToV2Test extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -22,8 +30,12 @@ class MigrateV1ToV2Test extends \PHPUnit_Framework_TestCase
     /** @var MigrateV1ToV2 */
     protected $migrator;
 
+    /**
+     * Setup for unit tests
+     */
     public function setUp()
     {
+        parent::setUp();
         $app = new Application();
         $app->register(new DoctrineServiceProvider(), array(
             'db.options' => array(
