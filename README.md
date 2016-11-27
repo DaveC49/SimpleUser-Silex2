@@ -23,7 +23,11 @@ This configuration should work out of the box to get you up and running quickly.
 
 Install with composer. This command will automatically install the latest stable version:
 
+For Silex 1.3
 composer require jasongrimes/silex-simpleuser
+
+for Silex 2.0
+composer require davec49/silex2-simpleuser
 Set up your Silex application something like this:
 
 <?php

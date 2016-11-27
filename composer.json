@@ -1,7 +1,7 @@
 {
-  "name": "jasongrimes/silex2-simpleuser",
+  "name": "davec49/silex2-simpleuser",
   "type": "library",
-  "description": "A simple database-backed user provider for Silex 2.0, with associated services and controllers.",
+  "description": "A simple database-backed user provider for Silex 2.0, with associated services and controllers forked from jasongrimes/SimpleUser.",
   "keywords": ["silex", "user", "user provider", "simple user provider"],
   "homepage": "https://github.com/DaveC49/SimpleUser-Silex2",
   "license": "BSD-2-Clause",
