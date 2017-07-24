@@ -10,7 +10,6 @@ use Silex\API\BootableProviderInterface;
 use Silex\ControllerCollection;
 use Silex\ServiceControllerResolver;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authorization\Voter\RoleHierarchyVoter;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 use SimpleUser\UserManager;
@@ -178,13 +177,7 @@ class UserServiceProvider implements
 
         // Add a custom security voter to support testing user attributes.
         $app['security.voters'] = $app->extend('security.voters', function($voters) use ($app) {
-            foreach ($voters as $voter) {
-                if ($voter instanceof RoleHierarchyVoter) {
-                    $roleHierarchyVoter = $voter;
-                    break;
-                }
-            }
-            $voters[] = new EditUserVoter($roleHierarchyVoter);
+            $voters[] = new EditUserVoter($app);
             return $voters;
         });
 

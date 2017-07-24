@@ -2,90 +2,58 @@
 
 namespace SimpleUser;
 
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\Voter\RoleHierarchyVoter;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Silex\Application;
 use SimpleUser\User;
 
-class EditUserVoter implements VoterInterface
+class EditUserVoter extends Voter
 {
-    /** @var RoleHierarchyVoter */
-    protected $roleHierarchyVoter;
 
-    /**
-     * @param RoleHierarchyVoter $roleHierarchyVoter
-     */
-    public function __construct(RoleHierarchyVoter $roleHierarchyVoter)
+    protected $container;
+
+    public function __construct(\Silex\Application $app)
     {
-        $this->roleHierarchyVoter = $roleHierarchyVoter;
+        $this->container = $app;
     }
 
-    /**
-     * Checks if the voter supports the given attribute.
-     *
-     * @param string $attribute An attribute
-     *
-     * @return Boolean true if this Voter supports the attribute, false otherwise
-     */
-    public function supportsAttribute($attribute)
+    protected function getDecisionManager()
     {
-        return in_array($attribute, array('EDIT_USER', 'EDIT_USER_ID'));
+        return $this->container['security.access_manager'];
     }
 
-    /**
-     * Checks if the voter supports the given user token class.
-     *
-     * @param string $class A class name
-     *
-     * @return true if this Voter can process the class
-     */
-    public function supportsClass($class)
+    const EDIT = 'EDIT_USER';
+    const EDIT_ID = 'EDIT_USER_ID';
+
+    protected function supports($attribute, $subject)
     {
-        return true;
+        return ( $subject instanceof User || is_numeric($subject) ) && in_array($attribute, array(
+            self::EDIT, self::EDIT_ID
+        ));
     }
 
-    /**
-     * Returns the vote for the given parameters.
-     *
-     * This method must return one of the following constants:
-     * ACCESS_GRANTED, ACCESS_DENIED, or ACCESS_ABSTAIN.
-     *
-     * @param TokenInterface $token      A TokenInterface instance
-     * @param object $object     The object to secure
-     * @param array $attributes An array of attributes associated with the method being invoked
-     *
-     * @return integer either ACCESS_GRANTED, ACCESS_ABSTAIN, or ACCESS_DENIED
-     */
-    public function vote(TokenInterface $token, $object, array $attributes)
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         $user = $token->getUser();
-
-        foreach ($attributes as $attribute) {
-            if (!$this->supportsAttribute($attribute)) {
-                continue;
-            }
-
-            if ($this->hasRole($token, 'ROLE_ADMIN')) {
-                return VoterInterface::ACCESS_GRANTED;
-            }
-
-            if ($attribute == 'EDIT_USER') {
-                $user2 = $object;
-                return $this->usersHaveSameId($user, $user2) ? VoterInterface::ACCESS_GRANTED : VoterInterface::ACCESS_DENIED;
-            }
-
-            if ($attribute == 'EDIT_USER_ID') {
-                $id = $object;
-                return $this->hasUserId($user, $id) ? VoterInterface::ACCESS_GRANTED : VoterInterface::ACCESS_DENIED;
-            }
+        if (!$user instanceof User) {
+            return false;
         }
 
-        return VoterInterface::ACCESS_ABSTAIN;
-    }
+        if ($this->getDecisionManager()->decide($token, array('ROLE_ADMIN'))) {
+            return true;
+        }
 
-    protected function hasRole($token, $role)
-    {
-        return VoterInterface::ACCESS_GRANTED == $this->roleHierarchyVoter->vote($token, null, array($role));
+        if ($attribute == self::EDIT) {
+            $user2 = $subject;
+            return $this->usersHaveSameId($user, $user2) ? true : false;
+        }
+
+        if ($attribute == self::EDIT_ID) {
+            $id = $subject;
+            return $this->hasUserId($user, $id) ? true : false;
+        }
+
+        return false;
     }
 
     protected function hasUserId($user, $id)
