@@ -110,6 +110,7 @@ class UserManager implements UserProviderInterface
         if (!$this->supportsClass(get_class($user))) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
+        /** @var \SimpleUser\User $user $user is of class SimpleUser\User if exception hasn't been thrown */
 
         return $this->getUser($user->getId());
     }
@@ -182,6 +183,7 @@ class UserManager implements UserProviderInterface
     {
 
         $userClass = $this->getUserClass();
+        /**  @var \SimpleUser\User $user  */
 
         $user = new $userClass($email);
 
@@ -207,7 +209,7 @@ class UserManager implements UserProviderInterface
      */
     protected function getEncoder(UserInterface $user)
     {
-        return $this->app['security.encoder_factory']->getEncoder($user);
+        return $this->app['security.password_encoder']->getEncoder($user);
     }
 
     /**
@@ -738,10 +740,10 @@ class UserManager implements UserProviderInterface
      */
     public function loginAsUser(User $user)
     {
-        if (null !== ($current_token = $this->app['security']->getToken())) {
-            $providerKey = method_exists($current_token, 'getProviderKey') ? $current_token->getProviderKey() : $current_token->getKey();
+        if (null !== ($current_token = $this->app['security.token_storage']->getToken())) {
+            $providerKey = method_exists($current_token, 'getProviderKey') ? $current_token->getProviderKey() : $current_token->getSecret();
             $token = new UsernamePasswordToken($user, null, $providerKey);
-            $this->app['security']->setToken($token);
+            $this->app['security.token_storage']->setToken($token);
 
             $this->app['user'] = $user;
         }

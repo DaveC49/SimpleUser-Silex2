@@ -95,7 +95,7 @@ $app['security.firewalls'] = array(
         'logout' => array(
             'logout_path' => '/user/logout',
         ),
-        'users' => $app->share(function($app) { return $app['user.manager']; }),
+        'users' => function() use $app { return $app['user.manager']; }),
     ),
 );
 
