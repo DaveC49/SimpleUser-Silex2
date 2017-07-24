@@ -1,7 +1,7 @@
-This is a version of Jason Grimes Simple User which has been modified to work with Silex 2.0 rather than SIlex 1.3.. 
-Both the source code and the unit tests have been modified and the unit tests complete successfully. 
+**This is a version of Jason Grimes Simple User which has been modified to work with Silex 2.0 rather than SIlex 1.3.. 
+Both the source code and the unit tests have been modified and the unit tests complete successfully.**
 
-Simple User Provider for Silex
+#Simple User Provider for Silex
 
 Build Status Total Downloads Latest Stable Version Latest Unstable Version
 
@@ -9,27 +9,35 @@ A simple, extensible, database-backed user provider for the Silex security servi
 
 SimpleUser is an easy way to set up user accounts (authentication, authorization, and user administration) in the Silex PHP micro-framework. It provides drop-in services for Silex that implement the missing user management pieces for the Security component. It includes a basic User model, a database-backed user manager, controllers and views for user administration, and various supporting features.
 
-Demo
+##Demo
 
-Online demo
-Demo source code
-Upgrading
+[Online demo](http://silex-simpleuser-demo.grimesit.com/)
+
+[Demo source code](https://github.com/jasongrimes/silex-simpleuser-demo)
+
+##Upgrading
 
 If you're upgrading from 1.x, you'll need to update the database for version 2.0. Tools are provided to make this database migration relatively painless. See sql/MIGRATION.md for details.
 
-Quick start example config
+##Quick start example config
 
 This configuration should work out of the box to get you up and running quickly. See below for additional details.
 
 Install with composer. This command will automatically install the latest stable version:
 
-For Silex 1.3
+###For Silex 1.3
+```
 composer require jasongrimes/silex-simpleuser
+```
 
-for Silex 2.0
+###For Silex 2.0
+```
 composer require davec49/silex2-simpleuser
+```
+
 Set up your Silex application something like this:
 
+```
 <?php
 
 use Silex\Application;
@@ -112,17 +120,22 @@ $app['db.options'] = array(
 );
 
 return $app;
-Create the user database:
+```
 
+##Create the user database:
+
+```
 mysql -uUSER -pPASSWORD MYDBNAME < vendor/jasongrimes/silex-simpleuser/sql/mysql.sql
+```
 Note: if you're upgrading from SimpleUser 1.x, follow the instructions in sql/MIGRATION.md instead, to migrate the database without losing existing data.
 
 You should now be able to create an account at the /user/register URL. Make the new account an administrator by editing the record directly in the database and setting the users.roles column to ROLE_USER,ROLE_ADMIN. (After you have one admin account, it can grant the admin role to others via the web interface.)
 
-Config options
+##Config options
 
 All of these options are optional. SimpleUser can work without any configuration at all, or you can customize one or more of the following options. The default values are shown below.
 
+```
 $app['user.options'] = array(
 
     // Specify custom view templates here.
@@ -191,3 +204,4 @@ $app['user.options'] = array(
         'value' => 'value',
     ),
 );
+```
