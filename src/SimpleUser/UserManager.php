@@ -209,7 +209,7 @@ class UserManager implements UserProviderInterface
      */
     protected function getEncoder(UserInterface $user)
     {
-        return $this->app['security.password_encoder']->getEncoder($user);
+        return $this->app['security.encoder_factory']->getEncoder($user);
     }
 
     /**
